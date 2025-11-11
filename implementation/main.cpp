@@ -12,10 +12,11 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <cstdlib>
+#include <memory>
 #include "seconds.h"
 #include "LBM.h"
-
+#include <mdspan>
 int main(int argc, char* argv[])
 {
     printf("Simulating Taylor-Green vortex decay\n");
@@ -31,7 +32,12 @@ int main(int argc, char* argv[])
     
     double bytesPerMiB = 1024.0*1024.0;
     double bytesPerGiB = 1024.0*1024.0*1024.0;
-    
+
+
+
+    std::unique_ptr<double[]> affen = std::make_unique<double[]>(mem_size_0dir);
+    auto a = std::mdspan(affen.data());
+
     double *f0  = (double*) malloc(mem_size_0dir);
     double *f1  = (double*) malloc(mem_size_n0dir);
     double *f2  = (double*) malloc(mem_size_n0dir);
