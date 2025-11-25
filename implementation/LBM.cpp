@@ -35,7 +35,7 @@ void taylor_green(unsigned int t, unsigned int x, unsigned int y, double *r, dou
     *v = uy;
 }
 
-void taylor_green(unsigned int t,std::mdspan<std::vector<double>, std::extents<unsigned long, NX, NY>> r,  std::mdspan<std::vector<double>, std::mdspan<std::vector<double>, std::extents<unsigned long, NX, NY>> u,  std::mdspan<std::vector<double>, std::extents<unsigned long, NX, NY>> v)
+void taylor_green(unsigned int t, r,  u,  v)
 {
     for(unsigned int y = 0; y < NY; ++y)
     {

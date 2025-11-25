@@ -68,12 +68,12 @@ int main(int argc, char* argv[])
     // ux and uy are two dimensional fields respectivly
     // the field f is of the form f[N_x][N_y][q]
 
-    auto ptr_f0 = std::make_unique<std::vector<double>>(mem_size_0dir);
-    auto ptr_f1 = std::make_unique<std::vector<double>>(mem_size_n0dir);
-    auto ptr_f2 = std::make_unique<std::vector<double>>(mem_size_n0dir);
-    auto ptr_rho = std::make_unique<std::vector<double>>(mem_size_scalar);
-    auto ptr_ux = std::make_unique<std::vector<double>>(mem_size_scalar);
-    auto ptr_uy = std::make_unique<std::vector<double>>(mem_size_scalar);
+    auto ptr_f0 = std::make_unique<double[]>(mem_size_0dir);
+    auto ptr_f1 = std::make_unique<double[]>(mem_size_n0dir);
+    auto ptr_f2 = std::make_unique<double[]>(mem_size_n0dir);
+    auto ptr_rho = std::make_unique<double[]>(mem_size_scalar);
+    auto ptr_ux = std::make_unique<double[]>(mem_size_scalar);
+    auto ptr_uy = std::make_unique<double[]>(mem_size_scalar);
 
 
     size_t total_mem_bytes = mem_size_0dir + 2*mem_size_n0dir + 3*mem_size_scalar;
