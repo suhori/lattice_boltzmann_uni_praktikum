@@ -32,8 +32,8 @@ int main(int argc, char* argv[])
     auto ptr = std::unique_ptr<double[]>(new double[]{1,2,3,4,5,6,7,8,9,10,11,12});
     double a1[12] = {1,2,3,4,5,6,7,8,9,10,11,12};
 
-    auto test= std::mdspan<double, std::extents<std::size_t, 2,6>> (ptr.get());
-
+    auto test1= std::mdspan<double, std::extents<std::size_t, 2,6>> (ptr.get());
+    auto test = std::mdspan(ptr.get(),2,6);
     for (std::size_t i = 0; i < test.extent(0);i++) {
         for (std::size_t j= 0; j< test.extent(1);j++) {
             std::cout << test[i,j] << " ";
@@ -56,30 +56,40 @@ int main(int argc, char* argv[])
     double bytesPerMiB = 1024.0*1024.0;
     double bytesPerGiB = 1024.0*1024.0*1024.0;
 
-    /*
-    double *f0  = (double*) malloc(mem_size_0dir);
-    double *f1  = (double*) malloc(mem_size_n0dir);
-    double *f2  = (double*) malloc(mem_size_n0dir);
-    double *rho = (double*) malloc(mem_size_scalar);
-    double *ux  = (double*) malloc(mem_size_scalar);
-    double *uy  = (double*) malloc(mem_size_scalar);
-    */
-    auto ptr_f = std::make_unique<double[]>(mem_size_0dir+2*mem_size_n0dir);
-    auto f0 = std::mdspan<double,std::extent<size_t,2,3,4>>(ptr_f.get());
-    auto ptr_f1 = std::make_unique<double[]>(mem_size_n0dir);
-    auto ptr_f2 = std::make_unique<double[]>(mem_size_n0dir);
-    auto ptr_rho = std::make_unique<double[]>(mem_size_scalar);
-    auto ptr_ux = std::make_unique<double[]>(mem_size_scalar);
-    auto ptr_uy = std::make_unique<double[]>(mem_size_scalar);
+    ///*
+    double *f0_alt  = (double*) malloc(mem_size_0dir);
+    double *f1_alt  = (double*) malloc(mem_size_n0dir);
+    double *f2_alt  = (double*) malloc(mem_size_n0dir);
+    double *rho_alt = (double*) malloc(mem_size_scalar);
+    double *ux_alt  = (double*) malloc(mem_size_scalar);
+    double *uy_alt  = (double*) malloc(mem_size_scalar);
+    //*/
+    // rho is a two dimensional field
+    // ux and uy are two dimensional fields respectivly
+    // the field f is of the form f[N_x][N_y][q]
+
+    auto ptr_f0 = std::make_unique<std::vector<double>>(mem_size_0dir);
+    auto ptr_f1 = std::make_unique<std::vector<double>>(mem_size_n0dir);
+    auto ptr_f2 = std::make_unique<std::vector<double>>(mem_size_n0dir);
+    auto ptr_rho = std::make_unique<std::vector<double>>(mem_size_scalar);
+    auto ptr_ux = std::make_unique<std::vector<double>>(mem_size_scalar);
+    auto ptr_uy = std::make_unique<std::vector<double>>(mem_size_scalar);
+
 
     size_t total_mem_bytes = mem_size_0dir + 2*mem_size_n0dir + 3*mem_size_scalar;
     
-    if(f0 == NULL || f1 == NULL || f2 == NULL || rho == NULL || ux == NULL || uy == NULL)
+    /*if(f0 == NULL || f1 == NULL || f2 == NULL || rho == NULL || ux == NULL || uy == NULL)
     {
         fprintf(stderr,"Error: unable to allocate required memory (%.1f MiB).\n",total_mem_bytes/bytesPerMiB);
         exit(-1);
-    }
-    
+    }*/
+
+    auto f0 = std::mdspan(ptr_f0.get(),NX,NY);
+    auto f1 = std::mdspan(ptr_f1.get(),NX,NY,(ndir-1));
+    auto f2 = std::mdspan(ptr_f2.get(),NX,NY,(ndir-1));
+    auto rho = std::mdspan(ptr_rho.get(),NX,NY);
+    auto ux = std::mdspan(ptr_ux.get(),NX,NY);
+    auto uy = std::mdspan(ptr_uy.get(),NX,NY);
     // compute Taylor-Green flow at t=0 
     // to initialise rho, ux, uy fields.
     taylor_green(0,rho,ux,uy);

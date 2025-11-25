@@ -10,6 +10,7 @@
  * Author: Orest Shardt
  *
  */
+//TODO LBM as class?
 #ifndef __LBM_H
 #define __LBM_H
 

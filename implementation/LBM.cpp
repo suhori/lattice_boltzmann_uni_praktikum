@@ -13,7 +13,8 @@
 #include <stdio.h>
 #define _USE_MATH_DEFINES
 #include <math.h>
-
+#include <mdspan>
+#include <vector>
 #include "LBM.h"
 
 void taylor_green(unsigned int t, unsigned int x, unsigned int y, double *r, double *u, double *v)
@@ -34,14 +35,14 @@ void taylor_green(unsigned int t, unsigned int x, unsigned int y, double *r, dou
     *v = uy;
 }
 
-void taylor_green(unsigned int t, double *r, double *u, double *v)
+void taylor_green(unsigned int t,std::mdspan<std::vector<double>, std::extents<unsigned long, NX, NY>> r,  std::mdspan<std::vector<double>, std::mdspan<std::vector<double>, std::extents<unsigned long, NX, NY>> u,  std::mdspan<std::vector<double>, std::extents<unsigned long, NX, NY>> v)
 {
     for(unsigned int y = 0; y < NY; ++y)
     {
         for(unsigned int x = 0; x < NX; ++x)
         {
             size_t sidx = scalar_index(x,y);
-
+//TODO
             taylor_green(t,x,y,&r[sidx],&u[sidx],&v[sidx]);
         }
     }
