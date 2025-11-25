@@ -17,6 +17,7 @@
 #include <vector>
 #include <version>
 
+using namespace std;
 
 #  include <mdspan>
 #include <ostream>
@@ -56,24 +57,24 @@ int main(int argc, char* argv[])
     double bytesPerMiB = 1024.0*1024.0;
     double bytesPerGiB = 1024.0*1024.0*1024.0;
 
-    ///*
+    /*
     double *f0_alt  = (double*) malloc(mem_size_0dir);
     double *f1_alt  = (double*) malloc(mem_size_n0dir);
     double *f2_alt  = (double*) malloc(mem_size_n0dir);
     double *rho_alt = (double*) malloc(mem_size_scalar);
     double *ux_alt  = (double*) malloc(mem_size_scalar);
     double *uy_alt  = (double*) malloc(mem_size_scalar);
-    //*/
+    */
     // rho is a two dimensional field
     // ux and uy are two dimensional fields respectivly
     // the field f is of the form f[N_x][N_y][q]
 
-    auto ptr_f0 = std::make_unique<double[]>(mem_size_0dir);
-    auto ptr_f1 = std::make_unique<double[]>(mem_size_n0dir);
-    auto ptr_f2 = std::make_unique<double[]>(mem_size_n0dir);
-    auto ptr_rho = std::make_unique<double[]>(mem_size_scalar);
-    auto ptr_ux = std::make_unique<double[]>(mem_size_scalar);
-    auto ptr_uy = std::make_unique<double[]>(mem_size_scalar);
+    auto ptr_f0 = make_unique<double[]>(mem_size_0dir);
+    auto ptr_f1 = make_unique<double[]>(mem_size_n0dir);
+    auto ptr_f2 = make_unique<double[]>(mem_size_n0dir);
+    auto ptr_rho =make_unique<double[]>(mem_size_scalar);
+    auto ptr_ux = make_unique<double[]>(mem_size_scalar);
+    auto ptr_uy = make_unique<double[]>(mem_size_scalar);
 
 
     size_t total_mem_bytes = mem_size_0dir + 2*mem_size_n0dir + 3*mem_size_scalar;
@@ -84,12 +85,12 @@ int main(int argc, char* argv[])
         exit(-1);
     }*/
 
-    auto f0 = std::mdspan(ptr_f0.get(),NX,NY);
-    auto f1 = std::mdspan(ptr_f1.get(),NX,NY,(ndir-1));
-    auto f2 = std::mdspan(ptr_f2.get(),NX,NY,(ndir-1));
-    auto rho = std::mdspan(ptr_rho.get(),NX,NY);
-    auto ux = std::mdspan(ptr_ux.get(),NX,NY);
-    auto uy = std::mdspan(ptr_uy.get(),NX,NY);
+    auto f0 = mdspan(ptr_f0.get(),NX,NY);
+    auto f1 = mdspan(ptr_f1.get(),NX,NY,(ndir-1));
+    auto f2 = mdspan(ptr_f2.get(),NX,NY,(ndir-1));
+    auto rho = mdspan(ptr_rho.get(),NX,NY);
+    auto ux = mdspan(ptr_ux.get(),NX,NY);
+    auto uy = mdspan(ptr_uy.get(),NX,NY);
     // compute Taylor-Green flow at t=0 
     // to initialise rho, ux, uy fields.
     taylor_green(0,rho,ux,uy);

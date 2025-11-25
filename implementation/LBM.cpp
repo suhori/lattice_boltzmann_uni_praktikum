@@ -16,6 +16,7 @@
 #include <mdspan>
 #include <vector>
 #include "LBM.h"
+using namespace std;
 
 void taylor_green(unsigned int t, unsigned int x, unsigned int y, double *r, double *u, double *v)
 {
@@ -35,14 +36,14 @@ void taylor_green(unsigned int t, unsigned int x, unsigned int y, double *r, dou
     *v = uy;
 }
 
-void taylor_green(unsigned int t, r,  u,  v)
+void taylor_green(unsigned int t, mdspan<double, dextents<size_t, 2>> r,mdspan<double, dextents<size_t, 2>> u,mdspan<double, dextents<size_t, 2>> v)
 {
     for(unsigned int y = 0; y < NY; ++y)
     {
         for(unsigned int x = 0; x < NX; ++x)
         {
             size_t sidx = scalar_index(x,y);
-//TODO
+//TODO slice arrays
             taylor_green(t,x,y,&r[sidx],&u[sidx],&v[sidx]);
         }
     }
