@@ -1,11 +1,9 @@
-cmake_minimum_required(VERSION 4.0)
+cmake_minimum_required(VERSION 3.31)
 project(lattice_boltzmann_uni_praktikum)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-
-include_directories(.)
 
 add_executable(lattice_boltzmann_uni_praktikum
         LBM.cpp
@@ -13,6 +11,11 @@ add_executable(lattice_boltzmann_uni_praktikum
         main.cpp
         seconds.cpp
         seconds.h)
+
+
+target_include_directories(lattice_boltzmann_uni_praktikum PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
 
 # If building with Clang, prefer libc++ over libstdc++ so that C++23 features like std::mdspan are available.
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")

@@ -1,0 +1,3 @@
+/home/bastian/lattice_boltzmann_uni_praktikum/implementation/build/CMakeFiles/lattice_boltzmann_uni_praktikum.dir
+/home/bastian/lattice_boltzmann_uni_praktikum/implementation/build/CMakeFiles/edit_cache.dir
+/home/bastian/lattice_boltzmann_uni_praktikum/implementation/build/CMakeFiles/rebuild_cache.dir
