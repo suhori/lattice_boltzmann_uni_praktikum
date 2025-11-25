@@ -13,3 +13,15 @@ add_executable(lattice_boltzmann_uni_praktikum
         main.cpp
         seconds.cpp
         seconds.h)
+
+# If building with Clang, prefer libc++ over libstdc++ so that C++23 features like std::mdspan are available.
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    # Use libc++ standard library implementation
+    target_compile_options(lattice_boltzmann_uni_praktikum PRIVATE -stdlib=libc++)
+    target_link_options(lattice_boltzmann_uni_praktikum PRIVATE -stdlib=libc++)
+
+    # On Linux, explicitly link against libc++ and libc++abi to avoid picking up libstdc++ implicitly.
+    if (UNIX AND NOT APPLE)
+        target_link_libraries(lattice_boltzmann_uni_praktikum PRIVATE c++ c++abi)
+    endif ()
+endif ()

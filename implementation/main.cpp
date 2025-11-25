@@ -13,12 +13,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cstdlib>
-#include <memory>
 #include "seconds.h"
 #include "LBM.h"
-#include <mdspan>
+
 int main(int argc, char* argv[])
 {
+    std::unique_ptr<double[]> affen = std::make_unique<double[]>(mem_size_0dir);
+    //auto a = std::mdspan(affen.data());
+    std::vector v{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+
+    // View data as contiguous memory representing 2 rows of 6 ints each
+    auto ms2 = std::mdspan(v.data(), 2, 6);
+
     printf("Simulating Taylor-Green vortex decay\n");
     printf("      domain size: %ux%u\n",NX,NY);
     printf("               nu: %g\n",nu);
@@ -32,11 +38,6 @@ int main(int argc, char* argv[])
     
     double bytesPerMiB = 1024.0*1024.0;
     double bytesPerGiB = 1024.0*1024.0*1024.0;
-
-
-
-    std::unique_ptr<double[]> affen = std::make_unique<double[]>(mem_size_0dir);
-    auto a = std::mdspan(affen.data());
 
     double *f0  = (double*) malloc(mem_size_0dir);
     double *f1  = (double*) malloc(mem_size_n0dir);
