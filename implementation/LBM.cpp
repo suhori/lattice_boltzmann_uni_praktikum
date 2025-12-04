@@ -19,6 +19,8 @@
 #include <vector>
 #include <memory>
 #include "LBM.h"
+
+#include <fstream>
 using namespace std;
 
 void LBM::taylor_green(unsigned int t, unsigned int x, unsigned int y,mdspan<double, dextents<size_t, 2>> r,mdspan<double, dextents<size_t, 2>> u,mdspan<double, dextents<size_t, 2>> v)
@@ -253,6 +255,7 @@ void LBM::report_flow_properties(unsigned int t, mdspan<double, dextents<size_t,
     double prop[4];
     compute_flow_properties(t,rho,ux,uy,prop);
     printf("%u,%g,%g,%g,%g\n",t,prop[0],prop[1],prop[2],prop[3]);
+    cout<<endl;
 }
 
 void LBM::save_scalar(const char* name, mdspan<double, dextents<size_t, 2>> scalar, unsigned int n)
@@ -260,6 +263,7 @@ void LBM::save_scalar(const char* name, mdspan<double, dextents<size_t, 2>> scal
     // assume reasonably-sized file names
     char filename[128];
     char format[16];
+    int ext = scalar.extent(0);
     
     // compute maximum number of digits
     int ndigits = floor(log10((double)NSTEPS)+1.0);
@@ -270,32 +274,40 @@ void LBM::save_scalar(const char* name, mdspan<double, dextents<size_t, 2>> scal
     sprintf(filename,format,name,n);
     
     // open file for writing
-    FILE *fout = fopen(filename,"wb+");
+    //FILE *fout = fopen(filename,"wb+");
 
-    double tmp[scalar.size()];
-    // write data
-    for (int i=0; i<n; i++) {
-        for (int j=0; j<n; j++) {
-            tmp[i+j]=scalar[i,j];
+    std::vector<double> tmp(scalar.size());    // write data
+    for (int i=0; i<scalar.extent(0); i++) {
+        for (int j=0; j<scalar.extent(1); j++) {
+            tmp[i*ext+j]=scalar[i,j];
             //cout<<tmp[i+j]<<" ";
         }
         //std::cout<<endl;
     }
 
-    fwrite(tmp,1,mem_size_scalar,fout);
+    //fwrite(tmp,1,mem_size_scalar,fout);
     //TODO write data correctly
     // close file
-    fclose(fout);
-    
-    if(ferror(fout))
-    {
-        fprintf(stderr,"Error saving to %s\n",filename);
-        perror("");
+    //fclose(fout);
+    std::ofstream out(filename);
+    if (!out.is_open()) {
+        throw std::runtime_error("Cannot open output file");
     }
-    else
-    {
-        if(!quiet)
+
+    // Array-Inhalte in Datei schreiben
+    for (double v : tmp) {
+        out << v ;
+    }
+    out<< "\n";
+    // //if(ferror(fout))
+    // {
+    //     fprintf(stderr,"Error saving to %s\n",filename);
+    //     perror("");
+    // }
+    // else
+    // {
+        if(!quiet){
             printf("Saved to %s\n",filename);
-    }
+        }
 }
 
