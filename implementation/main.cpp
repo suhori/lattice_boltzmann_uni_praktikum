@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
     auto ptr_uy = make_unique<double[]>(lbm.mem_size_scalar);
 
 
-    size_t total_mem_bytes = lbm.mem_size_0dir + 2*lbm.mem_size_n0dir + 3*lbm.mem_size_scalar;
+    //size_t total_mem_bytes = lbm.mem_size_0dir + 2*lbm.mem_size_n0dir + 3*lbm.mem_size_scalar;
 
     /*if(f0 == NULL || f1 == NULL || f2 == NULL || rho == NULL || ux == NULL || uy == NULL)
     {
@@ -160,7 +160,7 @@ int main(int argc, char* argv[])
     double bandwidth = (nodes_updated*(doubles_read + doubles_written)+nodes_saved*(doubles_saved))*sizeof(double)/(runtime*bytesPerGiB);
     
     printf(" ----- performance information -----\n");
-    printf(" memory allocated: %.1f (MiB)\n",total_mem_bytes/bytesPerMiB);
+    //printf(" memory allocated: %.1f (MiB)\n",total_mem_bytes/bytesPerMiB);
     printf("        timesteps: %u\n",lbm.NSTEPS);
     printf("          runtime: %.3f (s)\n",runtime);
     printf("            speed: %.2f (Mlups)\n",speed);

@@ -10,9 +10,11 @@
  * Author: Orest Shardt
  *
  */
-#include <stdio.h>
+#include <cstdio>
 #define _USE_MATH_DEFINES
-#include <math.h>
+#include <iostream>
+//#include <math.h>
+#include <cmath>
 #include <mdspan>
 #include <vector>
 #include <memory>
@@ -269,9 +271,18 @@ void LBM::save_scalar(const char* name, mdspan<double, dextents<size_t, 2>> scal
     
     // open file for writing
     FILE *fout = fopen(filename,"wb+");
-    
+
+    double tmp[scalar.size()];
     // write data
-    //fwrite(scalar,1,mem_size_scalar,fout);
+    for (int i=0; i<n; i++) {
+        for (int j=0; j<n; j++) {
+            tmp[i+j]=scalar[i,j];
+            //cout<<tmp[i+j]<<" ";
+        }
+        //std::cout<<endl;
+    }
+
+    fwrite(tmp,1,mem_size_scalar,fout);
     //TODO write data correctly
     // close file
     fclose(fout);
